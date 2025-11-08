@@ -1,12 +1,18 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Locale, getLocalizedName } from '@/lib/i18n';
 import { getTranslation } from '@/lib/translations';
 import { getTodayRange, getWeekendRange, getNextWeekRange, isEventInRange } from '@/lib/dates';
 import { trackOutboundClick, initGA4, buildUTMUrl, UTMParams } from '@/lib/analytics';
-import Map from './map/Map';
+import MapSkeleton from './map/MapSkeleton';
+
+const Map = dynamic(() => import('./map/Map'), { 
+  ssr: false,
+  loading: () => <MapSkeleton />
+});
 
 type DateFilter = 'all' | 'today' | 'weekend' | 'nextweek';
 type LayerType = 'events' | 'ski_resorts' | 'lessons' | 'rentals' | 'shuttle' | 'onsen';

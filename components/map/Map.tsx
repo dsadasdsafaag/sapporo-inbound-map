@@ -38,9 +38,11 @@ export default function Map(props: MapProps) {
   useEffect(() => {
     setMounted(true);
     
+    const forced = process.env.NEXT_PUBLIC_FORCE_MAPLIBRE === '1';
     const saved = sessionStorage.getItem('map_provider') as Provider | null;
-    const initial: Provider = saved ?? 
-      (process.env.NEXT_PUBLIC_MAP_PROVIDER === 'google' ? 'google' : 'maplibre');
+    const initial: Provider = forced 
+      ? 'maplibre' 
+      : (saved ?? (process.env.NEXT_PUBLIC_MAP_PROVIDER === 'google' ? 'google' : 'maplibre'));
     
     setProvider(initial);
     

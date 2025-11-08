@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { BASE_PATH } from '@/lib/prefix';
 
-const SW_VERSION = '2025-11-08-v4';
+const SW_VERSION = '2025-11-08-v5';
 
 export default function ServiceWorkerRegistration() {
   useEffect(() => {

@@ -47,6 +47,7 @@ npm install
 cp .env.example .env.local
 # Edit .env.local and configure:
 # - NEXT_PUBLIC_MAP_PROVIDER (google or maplibre)
+# - NEXT_PUBLIC_FORCE_MAPLIBRE (set to '1' to force MapLibre)
 # - NEXT_PUBLIC_GMAPS_API_KEY (if using Google Maps)
 # - NEXT_PUBLIC_GA4_MEASUREMENT_ID (optional)
 ```
@@ -77,6 +78,7 @@ To use Google Maps instead of MapLibre:
 4. **Fallback to MapLibre**:
    - If you don't configure Google Maps, the app will automatically fall back to MapLibre with OpenStreetMap tiles
    - To explicitly use MapLibre, set `NEXT_PUBLIC_MAP_PROVIDER=maplibre`
+   - To force MapLibre (useful during quota issues), set `NEXT_PUBLIC_FORCE_MAPLIBRE=1`
 
 ### Development
 
