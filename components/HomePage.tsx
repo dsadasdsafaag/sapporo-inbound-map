@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { Locale, getLocalizedName } from '@/lib/i18n';
 import { getTranslation } from '@/lib/translations';
 import { getTodayRange, getWeekendRange, getNextWeekRange, isEventInRange } from '@/lib/dates';
-import { trackOutboundClick, initGA4 } from '@/lib/analytics';
+import { trackOutboundClick, initGA4, buildUTMUrl, UTMParams } from '@/lib/analytics';
 
 const MapView = dynamic(() => import('./MapView'), { ssr: false });
 
@@ -167,9 +167,16 @@ export default function HomePage({ locale, events, skiResorts, activities }: Hom
     }
   };
 
-  const handleOutboundClick = (url: string, partner: string, itemId: string) => {
-    trackOutboundClick(partner, itemId, locale);
-    window.open(url, '_blank');
+  const handleOutboundClick = (url: string, partner: string, itemId: string, itemType: string) => {
+    const utmParams: UTMParams = {
+      utm_source: 'sapporo-inbound-map',
+      utm_medium: 'map-listing',
+      utm_campaign: `${itemType}-${locale}`,
+    };
+    
+    const urlWithUTM = buildUTMUrl(url, utmParams);
+    trackOutboundClick(partner, itemId, locale, utmParams);
+    window.open(urlWithUTM, '_blank');
   };
 
   return (
@@ -281,7 +288,7 @@ export default function HomePage({ locale, events, skiResorts, activities }: Hom
                       <p className="text-sm text-gray-600 mb-2">Season: {item.season as string}</p>
                       <div className="flex flex-wrap gap-2">
                         <button
-                          onClick={() => handleOutboundClick(item.tickets_url as string, 'official', itemId)}
+                          onClick={() => handleOutboundClick(item.tickets_url as string, 'official', itemId, 'ski_resort')}
                           className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
                         >
                           {t.cta.officialTickets}
@@ -289,7 +296,7 @@ export default function HomePage({ locale, events, skiResorts, activities }: Hom
                         {(item.lessons as { partner: string; url: string }[])?.map((lesson: { partner: string; url: string }) => (
                           <button
                             key={lesson.partner}
-                            onClick={() => handleOutboundClick(lesson.url, lesson.partner, itemId)}
+                            onClick={() => handleOutboundClick(lesson.url, lesson.partner, itemId, 'ski_resort')}
                             className="px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600"
                           >
                             {lesson.partner}
@@ -308,7 +315,7 @@ export default function HomePage({ locale, events, skiResorts, activities }: Hom
                     <>
                       <p className="text-sm text-gray-600 mb-2">{item.price_hint as string}</p>
                       <button
-                        onClick={() => handleOutboundClick(item.url as string, item.partner as string, itemId)}
+                        onClick={() => handleOutboundClick(item.url as string, item.partner as string, itemId, 'activity')}
                         className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600"
                       >
                         Book on {item.partner as string}

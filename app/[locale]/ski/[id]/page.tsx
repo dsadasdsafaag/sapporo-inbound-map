@@ -2,6 +2,8 @@ import { Locale, getLocalizedName } from '@/lib/i18n';
 import skiResorts from '@/content/ski_resorts.json';
 import activities from '@/content/activities.json';
 import { notFound } from 'next/navigation';
+import { buildUTMUrl, UTMParams } from '@/lib/analytics';
+import OutboundLink from '@/components/OutboundLink';
 
 export async function generateStaticParams() {
   const params: { locale: string; id: string }[] = [];
@@ -28,6 +30,12 @@ export default async function SkiResortPage({ params }: { params: Promise<{ loca
   const relatedActivities = activities.filter((a) => a.resort_ref === id);
   
   const description = `${name} ski resort in Hokkaido, Japan. Season: ${resort.season}. Located approximately ${resort.drive_minutes_from_sapporo} minutes from Sapporo.`;
+  
+  const utmParams: UTMParams = {
+    utm_source: 'sapporo-inbound-map',
+    utm_medium: 'ski-detail',
+    utm_campaign: `ski-${locale}`,
+  };
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -85,41 +93,49 @@ export default async function SkiResortPage({ params }: { params: Promise<{ loca
           <div className="mb-6">
             <h2 className="text-lg font-semibold mb-3">Book Tickets & Services</h2>
             <div className="flex flex-wrap gap-3">
-              <a
-                href={resort.tickets_url}
-                target="_blank"
-                rel="noopener noreferrer"
+              <OutboundLink
+                href={buildUTMUrl(resort.tickets_url, utmParams)}
+                partner="official"
+                itemId={id}
+                locale={locale}
+                utmParams={utmParams}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
                 Official Tickets
-              </a>
+              </OutboundLink>
               {resort.lessons?.map((lesson: { partner: string; url: string }) => (
-                <a
+                <OutboundLink
                   key={lesson.partner}
-                  href={lesson.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={buildUTMUrl(lesson.url, utmParams)}
+                  partner={lesson.partner}
+                  itemId={id}
+                  locale={locale}
+                  utmParams={utmParams}
                   className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
                 >
                   Book Lessons on {lesson.partner}
-                </a>
+                </OutboundLink>
               ))}
-              <a
-                href={resort.rentals_url}
-                target="_blank"
-                rel="noopener noreferrer"
+              <OutboundLink
+                href={buildUTMUrl(resort.rentals_url, utmParams)}
+                partner="official"
+                itemId={id}
+                locale={locale}
+                utmParams={utmParams}
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
               >
                 Rental Info
-              </a>
-              <a
-                href={resort.access_url}
-                target="_blank"
-                rel="noopener noreferrer"
+              </OutboundLink>
+              <OutboundLink
+                href={buildUTMUrl(resort.access_url, utmParams)}
+                partner="official"
+                itemId={id}
+                locale={locale}
+                utmParams={utmParams}
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
               >
                 Access Info
-              </a>
+              </OutboundLink>
             </div>
           </div>
           
@@ -136,14 +152,16 @@ export default async function SkiResortPage({ params }: { params: Promise<{ loca
                         <p className="font-medium">{getLocalizedName(shuttle, locale)}</p>
                         <p className="text-sm text-gray-600">{shuttle.price_hint}</p>
                       </div>
-                      <a
-                        href={shuttle.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <OutboundLink
+                        href={buildUTMUrl(shuttle.url, utmParams)}
+                        partner={shuttle.partner}
+                        itemId={id}
+                        locale={locale}
+                        utmParams={utmParams}
                         className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
                       >
                         Book
-                      </a>
+                      </OutboundLink>
                     </div>
                   );
                 })}
@@ -164,14 +182,16 @@ export default async function SkiResortPage({ params }: { params: Promise<{ loca
                         Languages: {activity.languages.join(', ')}
                       </p>
                     )}
-                    <a
-                      href={activity.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 inline-block"
+                    <OutboundLink
+                      href={buildUTMUrl(activity.url, utmParams)}
+                      partner={activity.partner}
+                      itemId={id}
+                      locale={locale}
+                      utmParams={utmParams}
+                      className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600"
                     >
                       Book on {activity.partner}
-                    </a>
+                    </OutboundLink>
                   </div>
                 ))}
               </div>

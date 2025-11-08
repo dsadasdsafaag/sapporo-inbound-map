@@ -1,6 +1,8 @@
 import { Locale, getLocalizedName } from '@/lib/i18n';
 import events from '@/content/events.json';
 import { notFound } from 'next/navigation';
+import { buildUTMUrl, UTMParams } from '@/lib/analytics';
+import OutboundLink from '@/components/OutboundLink';
 
 export async function generateStaticParams() {
   const params: { locale: string; id: string }[] = [];
@@ -26,6 +28,12 @@ export default async function EventPage({ params }: { params: Promise<{ locale: 
   const name = getLocalizedName(event, locale);
   
   const description = `${name} at ${event.venue} in ${event.area}, Sapporo. ${event.tags.join(', ')}.`;
+  
+  const utmParams: UTMParams = {
+    utm_source: 'sapporo-inbound-map',
+    utm_medium: 'event-detail',
+    utm_campaign: `event-${locale}`,
+  };
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -113,29 +121,33 @@ export default async function EventPage({ params }: { params: Promise<{ locale: 
               <h2 className="text-lg font-semibold mb-2">Booking</h2>
               <div className="flex flex-wrap gap-2">
                 {event.booking.map((booking: { partner: string; url: string }) => (
-                  <a
+                  <OutboundLink
                     key={booking.partner}
-                    href={booking.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={buildUTMUrl(booking.url, utmParams)}
+                    partner={booking.partner}
+                    itemId={id}
+                    locale={locale}
+                    utmParams={utmParams}
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                   >
                     Book via {booking.partner}
-                  </a>
+                  </OutboundLink>
                 ))}
               </div>
             </div>
           )}
           
           <div className="mt-6">
-            <a
-              href={event.source_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
+            <OutboundLink
+              href={buildUTMUrl(event.source_url, utmParams)}
+              partner="official"
+              itemId={id}
+              locale={locale}
+              utmParams={utmParams}
+              className="text-blue-500 hover:underline cursor-pointer bg-transparent border-none p-0"
             >
               Official Event Page →
-            </a>
+            </OutboundLink>
           </div>
           
           <div className="mt-4 text-sm text-gray-500">
