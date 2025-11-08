@@ -1,0 +1,114 @@
+[
+  {
+    "id": "sapporo-teine",
+    "type": "ski_resort",
+    "name": "Sapporo Teine",
+    "name_ja": "サッポロテイネ",
+    "name_zh_hans": "札幌手稻滑雪场",
+    "name_zh_hant": "札幌手稻滑雪場",
+    "name_ko": "삿포로 테이네",
+    "name_es": "Sapporo Teine",
+    "lat": 43.115,
+    "lng": 141.248,
+    "season": "late-Nov to Mar (est.)",
+    "tickets_url": "https://sapporo-teine.com/snow/lang/en/",
+    "rentals_url": "https://sapporo-teine.com/snow/lang/en/rental/",
+    "access_url": "https://sapporo-teine.com/snow/lang/en/access/",
+    "lessons": [
+      {
+        "partner": "klook",
+        "url": "https://www.klook.com/"
+      },
+      {
+        "partner": "kkday",
+        "url": "https://www.kkday.com/"
+      }
+    ],
+    "bus_refs": ["hokkaido-resort-liner"],
+    "drive_minutes_from_sapporo": 40,
+    "last_checked": "2025-11-08"
+  },
+  {
+    "id": "niseko-united",
+    "type": "ski_resort",
+    "name": "Niseko United",
+    "name_ja": "ニセコユナイテッド",
+    "name_zh_hans": "二世古联合滑雪场",
+    "name_zh_hant": "二世古聯合滑雪場",
+    "name_ko": "니세코 유나이티드",
+    "name_es": "Niseko United",
+    "lat": 42.8048,
+    "lng": 140.6874,
+    "season": "late-Nov to May (est.)",
+    "tickets_url": "https://www.niseko.ne.jp/en/",
+    "rentals_url": "https://www.niseko.ne.jp/en/rentals/",
+    "access_url": "https://www.niseko.ne.jp/en/access/",
+    "lessons": [
+      {
+        "partner": "klook",
+        "url": "https://www.klook.com/"
+      },
+      {
+        "partner": "kkday",
+        "url": "https://www.kkday.com/"
+      }
+    ],
+    "bus_refs": ["hokkaido-resort-liner", "niseko-shuttle"],
+    "drive_minutes_from_sapporo": 120,
+    "last_checked": "2025-11-08"
+  },
+  {
+    "id": "kiroro",
+    "type": "ski_resort",
+    "name": "Kiroro Resort",
+    "name_ja": "キロロリゾート",
+    "name_zh_hans": "喜乐乐度假村",
+    "name_zh_hant": "喜樂樂度假村",
+    "name_ko": "키로로 리조트",
+    "name_es": "Kiroro Resort",
+    "lat": 43.0839,
+    "lng": 140.9897,
+    "season": "late-Nov to May (est.)",
+    "tickets_url": "https://www.kiroro.co.jp/en/",
+    "rentals_url": "https://www.kiroro.co.jp/en/winter/rental/",
+    "access_url": "https://www.kiroro.co.jp/en/access/",
+    "lessons": [
+      {
+        "partner": "klook",
+        "url": "https://www.klook.com/"
+      },
+      {
+        "partner": "kkday",
+        "url": "https://www.kkday.com/"
+      }
+    ],
+    "bus_refs": ["kiroro-shuttle"],
+    "drive_minutes_from_sapporo": 60,
+    "last_checked": "2025-11-08"
+  },
+  {
+    "id": "kokusai",
+    "type": "ski_resort",
+    "name": "Sapporo Kokusai",
+    "name_ja": "札幌国際スキー場",
+    "name_zh_hans": "札幌国际滑雪场",
+    "name_zh_hant": "札幌國際滑雪場",
+    "name_ko": "삿포로 고쿠사이",
+    "name_es": "Sapporo Kokusai",
+    "lat": 43.1067,
+    "lng": 141.1572,
+    "season": "late-Nov to May (est.)",
+    "tickets_url": "https://www.sapporo-kokusai.jp/en/",
+    "rentals_url": "https://www.sapporo-kokusai.jp/en/rental/",
+    "access_url": "https://www.sapporo-kokusai.jp/en/access/",
+    "lessons": [
+      {
+        "partner": "klook",
+        "url": "https://www.klook.com/"
+      }
+    ],
+    "bus_refs": ["kokusai-shuttle"],
+    "drive_minutes_from_sapporo": 60,
+    "last_checked": "2025-11-08"
+  }
+]
