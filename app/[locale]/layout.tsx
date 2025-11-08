@@ -12,30 +12,25 @@ export const metadata: Metadata = {
   description: "Multilingual guide for inbound FIT travelers in Sapporo",
 };
 
-export default async function LocaleLayout({
+export default function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: { locale: Locale };
 }) {
-  const { locale } = await params as { locale: Locale };
-  
+  const { locale } = params;
+
+  // ※ html/head/body はここでは使わない（RootLayoutで定義済み）
   return (
-    <html lang={locale}>
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ffffff" />
-      </head>
-      <body className="antialiased">
-        <header className="sticky top-0 z-50 bg-white shadow-sm">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 className="text-xl font-bold">Sapporo Inbound Map</h1>
-            <LanguageSwitcher currentLocale={locale} />
-          </div>
-        </header>
-        {children}
-      </body>
-    </html>
+    <>
+      <header className="sticky top-0 z-50 bg-white shadow-sm">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <h1 className="text-xl font-bold">Sapporo Inbound Map</h1>
+          <LanguageSwitcher currentLocale={locale} />
+        </div>
+      </header>
+      {children}
+    </>
   );
 }
