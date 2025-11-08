@@ -1,19 +1,20 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.0.0/workbox-sw.js');
 
 const { registerRoute } = workbox.routing;
-const { CacheFirst, StaleWhileRevalidate, NetworkFirst } = workbox.strategies;
+const { CacheFirst, StaleWhileRevalidate, NetworkFirst, NetworkOnly } = workbox.strategies;
 const { ExpirationPlugin } = workbox.expiration;
 const { CacheableResponsePlugin } = workbox.cacheableResponse;
 
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
 
+const SW_VERSION = '2025-11-08-v2';
 const basePath = new URL(self.registration.scope).pathname.replace(/\/$/, '');
 
 registerRoute(
   ({ url }) => url.origin === 'https://tile.openstreetmap.org',
   new CacheFirst({
-    cacheName: 'osm-tiles',
+    cacheName: `osm-tiles-${SW_VERSION}`,
     plugins: [
       new ExpirationPlugin({
         maxEntries: 200,
@@ -27,9 +28,14 @@ registerRoute(
 );
 
 registerRoute(
-  ({ request }) => request.destination === 'style' || request.destination === 'script',
+  ({ url }) => url.pathname.includes('/_next/static/'),
+  new NetworkOnly()
+);
+
+registerRoute(
+  ({ request }) => request.destination === 'style',
   new StaleWhileRevalidate({
-    cacheName: 'static-resources',
+    cacheName: `static-resources-${SW_VERSION}`,
     plugins: [
       new ExpirationPlugin({
         maxEntries: 100,
@@ -42,7 +48,7 @@ registerRoute(
 registerRoute(
   ({ request }) => request.destination === 'image',
   new CacheFirst({
-    cacheName: 'images',
+    cacheName: `images-${SW_VERSION}`,
     plugins: [
       new ExpirationPlugin({
         maxEntries: 100,
@@ -58,7 +64,7 @@ registerRoute(
 registerRoute(
   ({ url }) => url.pathname.includes('/content/') && url.pathname.endsWith('.json'),
   new StaleWhileRevalidate({
-    cacheName: 'events-data',
+    cacheName: `events-data-${SW_VERSION}`,
     plugins: [
       new ExpirationPlugin({
         maxEntries: 10,
@@ -71,7 +77,7 @@ registerRoute(
 registerRoute(
   ({ url }) => url.pathname.match(/\/(en|ja|zh-Hans|zh-Hant|ko|es)\//),
   new NetworkFirst({
-    cacheName: 'pages',
+    cacheName: `pages-${SW_VERSION}`,
     plugins: [
       new ExpirationPlugin({
         maxEntries: 50,
@@ -91,8 +97,20 @@ self.addEventListener('install', (event) => {
   ];
   
   event.waitUntil(
-    caches.open('precache-v1').then((cache) => {
+    caches.open(`precache-${SW_VERSION}`).then((cache) => {
       return cache.addAll(urlsToCache);
+    })
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((cacheName) => !cacheName.includes(SW_VERSION))
+          .map((cacheName) => caches.delete(cacheName))
+      );
     })
   );
 });
