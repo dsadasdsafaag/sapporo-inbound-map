@@ -5,20 +5,39 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import Supercluster from 'supercluster';
 
-interface MapViewProps {
-  markers: Array<{
-    id: string;
-    lat: number;
-    lng: number;
-    type: string;
-    name: string;
-  }>;
-  onMarkerClick: (id: string) => void;
-  center?: [number, number];
-  zoom?: number;
+interface MapItem {
+  id: string;
+  lat: number;
+  lng: number;
+  title?: string;
+  type?: string;
 }
 
-export default function MapView({ markers, onMarkerClick, center = [141.3545, 43.0642], zoom = 12 }: MapViewProps) {
+interface MapLibreProps {
+  items: MapItem[];
+  onSelect?: (id: string) => void;
+  initialCenter?: { lat: number; lng: number };
+  initialZoom?: number;
+  locale: string;
+}
+
+export default function MapLibre({ 
+  items, 
+  onSelect, 
+  initialCenter = { lat: 43.0642, lng: 141.3545 }, 
+  initialZoom = 12,
+  locale 
+}: MapLibreProps) {
+  const markers = items.map(item => ({
+    id: item.id,
+    lat: item.lat,
+    lng: item.lng,
+    type: item.type || 'unknown',
+    name: item.title || item.id,
+  }));
+  const onMarkerClick = onSelect || (() => {});
+  const center: [number, number] = [initialCenter.lng, initialCenter.lat];
+  const zoom = initialZoom;
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState(false);

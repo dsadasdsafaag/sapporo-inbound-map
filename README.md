@@ -5,7 +5,7 @@ A multilingual SSG website for inbound FIT travelers in Sapporo, featuring local
 ## Features
 
 - **Multilingual Support**: 6 languages (ja/en/zh-Hans/zh-Hant/ko/es) with Next.js i18n routing
-- **Interactive Map**: MapLibre GL JS with OpenStreetMap tiles and marker clustering
+- **Interactive Map**: Google Maps or MapLibre GL JS with marker clustering (switchable)
 - **Event Discovery**: Small local events from Chikaho, Odori Park, Sapporo International Plaza
 - **Winter Activities**: Ski resorts with lessons, rentals, and shuttle information
 - **Smart Filters**: Filter by date (Today/Weekend/Next week) and layer type
@@ -18,9 +18,9 @@ A multilingual SSG website for inbound FIT travelers in Sapporo, featuring local
 
 - **Framework**: Next.js 16 (App Router, TypeScript)
 - **Styling**: Tailwind CSS
-- **Maps**: MapLibre GL JS with OSM tiles
-- **Clustering**: Supercluster
-- **PWA**: @ducanh2912/next-pwa
+- **Maps**: Google Maps JavaScript API or MapLibre GL JS with OSM tiles (switchable)
+- **Clustering**: @googlemaps/markerclusterer or Supercluster
+- **PWA**: Custom service worker with Workbox
 - **Build**: Static Site Generation (SSG)
 
 ## Getting Started
@@ -42,11 +42,41 @@ cd sapporo-inbound-map
 npm install
 ```
 
-3. (Optional) Configure Google Analytics:
+3. Configure environment variables:
 ```bash
 cp .env.example .env.local
-# Edit .env.local and add your GA4 Measurement ID
+# Edit .env.local and configure:
+# - NEXT_PUBLIC_MAP_PROVIDER (google or maplibre)
+# - NEXT_PUBLIC_GMAPS_API_KEY (if using Google Maps)
+# - NEXT_PUBLIC_GA4_MEASUREMENT_ID (optional)
 ```
+
+#### Google Maps Setup (Recommended)
+
+To use Google Maps instead of MapLibre:
+
+1. **Create a Google Maps API Key**:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/google/maps-apis/credentials)
+   - Create a new project or select an existing one
+   - Enable the "Maps JavaScript API"
+   - Create an API key
+
+2. **Restrict the API Key** (Important for security):
+   - Set HTTP referrer restrictions to:
+     - `dsadasdsafaag.github.io/*`
+     - `*.github.io/*`
+     - `localhost:3000/*` (for development)
+
+3. **Configure Environment Variables**:
+   ```bash
+   # In .env.local
+   NEXT_PUBLIC_MAP_PROVIDER=google
+   NEXT_PUBLIC_GMAPS_API_KEY=YOUR_API_KEY_HERE
+   ```
+
+4. **Fallback to MapLibre**:
+   - If you don't configure Google Maps, the app will automatically fall back to MapLibre with OpenStreetMap tiles
+   - To explicitly use MapLibre, set `NEXT_PUBLIC_MAP_PROVIDER=maplibre`
 
 ### Development
 
@@ -88,8 +118,11 @@ sapporo-inbound-map/
 │   └── sitemap.ts             # Sitemap generation
 ├── components/
 │   ├── HomePage.tsx           # Main map + list interface
-│   ├── MapView.tsx            # MapLibre map with clustering
-│   └── LanguageSwitcher.tsx   # Language selector
+│   ├── LanguageSwitcher.tsx   # Language selector
+│   └── map/
+│       ├── Map.tsx            # Map provider switch
+│       ├── GoogleMap.tsx      # Google Maps implementation
+│       └── MapLibre.tsx       # MapLibre implementation
 ├── content/
 │   ├── events.json            # Event data
 │   ├── ski_resorts.json       # Ski resort data

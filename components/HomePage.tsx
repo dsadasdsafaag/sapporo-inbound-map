@@ -8,7 +8,7 @@ import { getTranslation } from '@/lib/translations';
 import { getTodayRange, getWeekendRange, getNextWeekRange, isEventInRange } from '@/lib/dates';
 import { trackOutboundClick, initGA4, buildUTMUrl, UTMParams } from '@/lib/analytics';
 
-const MapView = dynamic(() => import('./MapView'), { ssr: false });
+const Map = dynamic(() => import('./map/Map'), { ssr: false });
 
 type DateFilter = 'all' | 'today' | 'weekend' | 'nextweek';
 type LayerType = 'events' | 'ski_resorts' | 'lessons' | 'rentals' | 'shuttle' | 'onsen';
@@ -134,7 +134,7 @@ export default function HomePage({ locale, events, skiResorts, activities }: Hom
     return items;
   }, [filteredEvents, skiResorts, activities, activeLayers, locale]);
 
-  const markers = useMemo(
+  const mapItems = useMemo(
     () =>
       allItems
         .filter((item) => item.lat && item.lng)
@@ -143,7 +143,7 @@ export default function HomePage({ locale, events, skiResorts, activities }: Hom
           lat: item.lat as number,
           lng: item.lng as number,
           type: item.type as string,
-          name: item.name as string,
+          title: item.name as string,
         })),
     [allItems]
   );
@@ -241,7 +241,7 @@ export default function HomePage({ locale, events, skiResorts, activities }: Hom
 
       <div className="flex flex-1 overflow-hidden">
         <div className="w-1/2 h-full">
-          <MapView markers={markers} onMarkerClick={handleMarkerClick} />
+          <Map items={mapItems} onSelect={handleMarkerClick} locale={locale} />
         </div>
         <div className="w-1/2 h-full overflow-y-auto p-4 bg-gray-50">
           <div className="space-y-4">
