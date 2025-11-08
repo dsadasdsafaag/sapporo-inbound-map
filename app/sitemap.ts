@@ -1,12 +1,13 @@
 import { MetadataRoute } from 'next';
 import { locales, defaultLocale } from '@/lib/i18n';
+import { getBaseUrl } from '@/lib/prefix';
 import events from '@/content/events.json';
 import skiResorts from '@/content/ski_resorts.json';
 
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://sapporo-inbound-map.vercel.app';
+  const baseUrl = getBaseUrl();
   const sitemap: MetadataRoute.Sitemap = [];
 
   locales.forEach((locale) => {

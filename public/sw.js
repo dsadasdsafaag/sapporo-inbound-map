@@ -8,6 +8,8 @@ const { CacheableResponsePlugin } = workbox.cacheableResponse;
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
 
+const basePath = new URL(self.registration.scope).pathname.replace(/\/$/, '');
+
 registerRoute(
   ({ url }) => url.origin === 'https://tile.openstreetmap.org',
   new CacheFirst({
@@ -82,10 +84,10 @@ registerRoute(
 
 self.addEventListener('install', (event) => {
   const urlsToCache = [
-    '/',
-    '/en/',
-    '/ja/',
-    '/manifest.json',
+    `${basePath}/`,
+    `${basePath}/en/`,
+    `${basePath}/ja/`,
+    `${basePath}/manifest.json`,
   ];
   
   event.waitUntil(

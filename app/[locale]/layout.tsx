@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { locales, Locale, defaultLocale } from "@/lib/i18n";
 import { getTranslation } from "@/lib/translations";
+import { withBase, getBaseUrl } from "@/lib/prefix";
 import "../globals.css";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -22,12 +23,12 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params as { locale: Locale };
   const t = getTranslation(locale);
-  const baseUrl = 'https://sapporo-inbound-map.vercel.app';
+  const baseUrl = getBaseUrl();
   
   return (
     <html lang={locale}>
       <head>
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href={withBase('/manifest.json')} />
         <meta name="theme-color" content="#ffffff" />
         <link rel="alternate" hrefLang="x-default" href={`${baseUrl}/${defaultLocale}/`} />
         {locales.map((loc) => (
