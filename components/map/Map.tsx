@@ -1,10 +1,19 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import MapSkeleton from './MapSkeleton';
 
-const GoogleMap = dynamic(() => import('./GoogleMap'), { ssr: false });
-const MapLibre = dynamic(() => import('./MapLibre'), { ssr: false });
+const GoogleMap = dynamic(() => import('./GoogleMap'), { 
+  ssr: false,
+  loading: () => <MapSkeleton />
+});
+const MapLibre = dynamic(() => import('./MapLibre'), { 
+  ssr: false,
+  loading: () => <MapSkeleton />
+});
+
+type Provider = 'google' | 'maplibre';
 
 interface MapItem {
   id: string;
@@ -23,14 +32,38 @@ interface MapProps {
 }
 
 export default function Map(props: MapProps) {
-  const provider = process.env.NEXT_PUBLIC_MAP_PROVIDER || 'maplibre';
+  const [mounted, setMounted] = useState(false);
+  const [provider, setProvider] = useState<Provider | null>(null);
 
-  const MapComponent = useMemo(() => {
-    if (provider === 'google') {
-      return GoogleMap;
+  useEffect(() => {
+    setMounted(true);
+    
+    const saved = sessionStorage.getItem('map_provider') as Provider | null;
+    const initial: Provider = saved ?? 
+      (process.env.NEXT_PUBLIC_MAP_PROVIDER === 'google' ? 'google' : 'maplibre');
+    
+    setProvider(initial);
+    
+    if (!saved) {
+      sessionStorage.setItem('map_provider', initial);
     }
-    return MapLibre;
+  }, []);
+
+  const handleGoogleError = useCallback(() => {
+    if (provider === 'google') {
+      console.warn('Google Maps failed to load, falling back to MapLibre');
+      setProvider('maplibre');
+      sessionStorage.setItem('map_provider', 'maplibre');
+    }
   }, [provider]);
 
-  return <MapComponent {...props} />;
+  if (!mounted || !provider) {
+    return <MapSkeleton />;
+  }
+
+  if (provider === 'google') {
+    return <GoogleMap {...props} onError={handleGoogleError} />;
+  }
+
+  return <MapLibre {...props} />;
 }

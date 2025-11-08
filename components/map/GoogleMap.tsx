@@ -18,6 +18,7 @@ interface GoogleMapProps {
   initialCenter?: google.maps.LatLngLiteral;
   initialZoom?: number;
   locale: string;
+  onError?: () => void;
 }
 
 export default function GoogleMap({
@@ -26,6 +27,7 @@ export default function GoogleMap({
   initialCenter = { lat: 43.0642, lng: 141.3545 }, // Sapporo center
   initialZoom = 12,
   locale,
+  onError,
 }: GoogleMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -40,6 +42,7 @@ export default function GoogleMap({
     if (!apiKey) {
       setError('Google Maps API key not configured');
       setLoading(false);
+      if (onError) onError();
       return;
     }
 
@@ -67,8 +70,9 @@ export default function GoogleMap({
       console.error('Error loading Google Maps:', err);
       setError('Failed to load Google Maps');
       setLoading(false);
+      if (onError) onError();
     });
-  }, [locale, initialCenter, initialZoom]);
+  }, [locale, initialCenter, initialZoom, onError]);
 
   useEffect(() => {
     if (!map || items.length === 0) return;

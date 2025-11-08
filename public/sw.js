@@ -8,7 +8,7 @@ const { CacheableResponsePlugin } = workbox.cacheableResponse;
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
 
-const SW_VERSION = '2025-11-08-v3';
+const SW_VERSION = '2025-11-08-v4';
 const basePath = new URL(self.registration.scope).pathname.replace(/\/$/, '');
 
 registerRoute(
