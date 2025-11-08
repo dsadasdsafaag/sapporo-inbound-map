@@ -41,7 +41,7 @@ export default async function LocaleLayout({
         <header className="sticky top-0 z-50 bg-white shadow-sm">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <h1 className="text-xl font-bold">{t.header.title}</h1>
-            <LanguageSwitcher currentLocale={locale} />
+            <LanguageSwitcher current={locale} />
           </div>
         </header>
         {children}

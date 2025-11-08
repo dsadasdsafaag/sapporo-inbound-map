@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { Locale, getLocalizedName } from '@/lib/i18n';
 import { getTranslation } from '@/lib/translations';
 import { getTodayRange, getWeekendRange, getNextWeekRange, isEventInRange } from '@/lib/dates';
@@ -275,12 +276,12 @@ export default function HomePage({ locale, events, skiResorts, activities }: Hom
                           </span>
                         ))}
                       </div>
-                      <a
+                      <Link
                         href={`/${locale}/event/${itemId}`}
                         className="text-blue-500 hover:underline text-sm"
                       >
                         {t.cta.viewDetails} →
-                      </a>
+                      </Link>
                     </>
                   )}
                   {itemType === 'ski_resort' && (
@@ -303,12 +304,12 @@ export default function HomePage({ locale, events, skiResorts, activities }: Hom
                           </button>
                         ))}
                       </div>
-                      <a
+                      <Link
                         href={`/${locale}/ski/${itemId}`}
                         className="text-blue-500 hover:underline text-sm mt-2 inline-block"
                       >
                         {t.cta.viewDetails} →
-                      </a>
+                      </Link>
                     </>
                   )}
                   {itemType === 'activity' && (

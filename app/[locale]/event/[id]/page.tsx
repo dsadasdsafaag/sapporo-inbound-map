@@ -3,6 +3,7 @@ import events from '@/content/events.json';
 import { notFound } from 'next/navigation';
 import { buildUTMUrl, UTMParams } from '@/lib/analytics';
 import OutboundLink from '@/components/OutboundLink';
+import Link from 'next/link';
 
 export async function generateStaticParams() {
   const params: { locale: string; id: string }[] = [];
@@ -70,9 +71,9 @@ export default async function EventPage({ params }: { params: Promise<{ locale: 
       />
       
       <div className="max-w-3xl mx-auto">
-        <a href={`/${locale}/`} className="text-blue-500 hover:underline mb-4 inline-block">
+        <Link href={`/${locale}/`} className="text-blue-500 hover:underline mb-4 inline-block">
           ← Back to Map
-        </a>
+        </Link>
         
         <h1 className="text-4xl font-bold mb-4">{name}</h1>
         
