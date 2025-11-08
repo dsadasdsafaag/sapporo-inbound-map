@@ -26,11 +26,14 @@ export default async function SkiResortPage({ params }: { params: Promise<{ loca
 
   const name = getLocalizedName(resort, locale);
   const relatedActivities = activities.filter((a) => a.resort_ref === id);
+  
+  const description = `${name} ski resort in Hokkaido, Japan. Season: ${resort.season}. Located approximately ${resort.drive_minutes_from_sapporo} minutes from Sapporo.`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SkiResort',
     name: name,
+    description: description,
     geo: {
       '@type': 'GeoCoordinates',
       latitude: resort.lat,

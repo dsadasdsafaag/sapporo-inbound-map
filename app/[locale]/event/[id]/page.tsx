@@ -24,11 +24,14 @@ export default async function EventPage({ params }: { params: Promise<{ locale: 
   }
 
   const name = getLocalizedName(event, locale);
+  
+  const description = `${name} at ${event.venue} in ${event.area}, Sapporo. ${event.tags.join(', ')}.`;
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: name,
+    description: description,
     startDate: event.start,
     endDate: event.end,
     location: {
