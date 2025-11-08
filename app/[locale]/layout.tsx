@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { locales, Locale } from "@/lib/i18n";
+import { locales, Locale, defaultLocale } from "@/lib/i18n";
+import { getTranslation } from "@/lib/translations";
 import "../globals.css";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -20,17 +21,23 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params as { locale: Locale };
+  const t = getTranslation(locale);
+  const baseUrl = 'https://sapporo-inbound-map.vercel.app';
   
   return (
     <html lang={locale}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#ffffff" />
+        <link rel="alternate" hrefLang="x-default" href={`${baseUrl}/${defaultLocale}/`} />
+        {locales.map((loc) => (
+          <link key={loc} rel="alternate" hrefLang={loc} href={`${baseUrl}/${loc}/`} />
+        ))}
       </head>
       <body className="antialiased">
         <header className="sticky top-0 z-50 bg-white shadow-sm">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 className="text-xl font-bold">Sapporo Inbound Map</h1>
+            <h1 className="text-xl font-bold">{t.header.title}</h1>
             <LanguageSwitcher currentLocale={locale} />
           </div>
         </header>

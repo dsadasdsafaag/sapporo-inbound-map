@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { locales } from '@/lib/i18n';
+import { locales, defaultLocale } from '@/lib/i18n';
 import events from '@/content/events.json';
 import skiResorts from '@/content/ski_resorts.json';
 
@@ -16,9 +16,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 1.0,
       alternates: {
-        languages: Object.fromEntries(
-          locales.map((l) => [l, `${baseUrl}/${l}/`])
-        ),
+        languages: {
+          'x-default': `${baseUrl}/${defaultLocale}/`,
+          ...Object.fromEntries(
+            locales.map((l) => [l, `${baseUrl}/${l}/`])
+          ),
+        },
       },
     });
   });
@@ -31,9 +34,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
         changeFrequency: 'weekly',
         priority: 0.8,
         alternates: {
-          languages: Object.fromEntries(
-            locales.map((l) => [l, `${baseUrl}/${l}/event/${event.id}`])
-          ),
+          languages: {
+            'x-default': `${baseUrl}/${defaultLocale}/event/${event.id}`,
+            ...Object.fromEntries(
+              locales.map((l) => [l, `${baseUrl}/${l}/event/${event.id}`])
+            ),
+          },
         },
       });
     });
@@ -47,9 +53,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
         changeFrequency: 'weekly',
         priority: 0.8,
         alternates: {
-          languages: Object.fromEntries(
-            locales.map((l) => [l, `${baseUrl}/${l}/ski/${resort.id}`])
-          ),
+          languages: {
+            'x-default': `${baseUrl}/${defaultLocale}/ski/${resort.id}`,
+            ...Object.fromEntries(
+              locales.map((l) => [l, `${baseUrl}/${l}/ski/${resort.id}`])
+            ),
+          },
         },
       });
     });
