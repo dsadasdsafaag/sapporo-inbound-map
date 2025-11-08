@@ -20,9 +20,9 @@ export default function LanguageSwitcher({ current }: { current: string }) {
   const pathname = usePathname() || '/';
   
   const onChange = (target: string) => {
-    const rest = stripLocale(stripBasePath(pathname));
-    const rest2 = rest || '/';
-    let next = `${BASE}/${target}${rest2}`.replace(/\/{2,}/g, '/');
+    let rest = stripLocale(stripBasePath(pathname)) || '/';
+    if (!rest.startsWith('/')) rest = '/' + rest;
+    let next = `/${target}${rest}`.replace(/\/{2,}/g, '/');
     if (!next.endsWith('/')) next += '/';
     router.push(next);
   };
