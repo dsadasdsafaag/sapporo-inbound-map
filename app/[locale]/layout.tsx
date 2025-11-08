@@ -4,6 +4,7 @@ import { getTranslation } from "@/lib/translations";
 import { withBase, getBaseUrl } from "@/lib/prefix";
 import "../globals.css";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -36,6 +37,7 @@ export default async function LocaleLayout({
         ))}
       </head>
       <body className="antialiased">
+        <ServiceWorkerRegistration />
         <header className="sticky top-0 z-50 bg-white shadow-sm">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
             <h1 className="text-xl font-bold">{t.header.title}</h1>

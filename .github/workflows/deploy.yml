@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - devin/1762614199-sapporo-mvp
   workflow_dispatch:
 
 permissions:
