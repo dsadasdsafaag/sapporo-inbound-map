@@ -1,30 +1,35 @@
 'use client';
+import { usePathname, useRouter } from 'next/navigation';
 
-import { locales, localeNames, Locale } from '@/lib/i18n';
-import { usePathname } from 'next/navigation';
+const LOCALES = ['en','ja','zh-Hans','zh-Hant','ko','es'] as const;
+const basePath =
+  process.env.NEXT_PUBLIC_BASE_PATH ??
+  (process.env.NODE_ENV === 'production' ? '/sapporo-inbound-map' : '');
 
-export default function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
-  const pathname = usePathname();
+function stripLocale(path: string) {
+  return path.replace(/^\/(en|ja|zh-Hans|zh-Hant|ko|es)(?=\/|$)/, '');
+}
 
-  const switchLocale = (newLocale: Locale) => {
-    const segments = pathname.split('/');
-    segments[1] = newLocale;
-    window.location.href = segments.join('/');
+export default function LanguageSwitcher({ currentLocale }: { currentLocale: string }) {
+  const router = useRouter();
+  const pathname = usePathname() || '/';
+  
+  const onChange = (target: string) => {
+    const rest = stripLocale(pathname);
+    let next = `${basePath}/${target}${rest}`;
+    if (!next.endsWith('/')) next += '/';
+    router.push(next);
   };
-
+  
   return (
-    <div className="relative">
-      <select
-        value={currentLocale}
-        onChange={(e) => switchLocale(e.target.value as Locale)}
-        className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        {locales.map((locale) => (
-          <option key={locale} value={locale}>
-            {localeNames[locale]}
-          </option>
-        ))}
-      </select>
-    </div>
+    <select 
+      value={currentLocale} 
+      onChange={(e) => onChange(e.target.value)} 
+      className="border rounded px-2 py-1"
+    >
+      {LOCALES.map((l) => (
+        <option key={l} value={l}>{l}</option>
+      ))}
+    </select>
   );
 }
