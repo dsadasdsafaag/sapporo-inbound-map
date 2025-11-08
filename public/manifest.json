@@ -2,23 +2,13 @@
   "name": "Sapporo Inbound Map",
   "short_name": "Sapporo Map",
   "description": "Multilingual guide for inbound FIT travelers in Sapporo",
-  "start_url": "/",
+  "start_url": "/sapporo-inbound-map/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
   "orientation": "portrait-primary",
   "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "/sapporo-inbound-map/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/sapporo-inbound-map/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
