@@ -72,7 +72,7 @@ After building, you can preview the static site locally:
 ```bash
 npx serve out
 ```
-
+　
 ## Project Structure
 
 ```
